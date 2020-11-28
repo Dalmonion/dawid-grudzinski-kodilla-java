@@ -14,28 +14,99 @@ public class Board {
         scan.nextLine();
         System.out.println("Gramy do " + getGamesNumber() + " zwycięstw. \nRozpoczynam grę...");
         play();
+        finish();
+    }
+
+    private void finish() {
+        Scanner scanner = new Scanner(System.in);
+        boolean istrue = false;
+
+        while(!istrue) {
+            System.out.println("Aby zakończyć grę wcisnij 'x'. Aby rozpocząć nową grę wcisnij 'n'");
+            String option = scanner.nextLine();
+            switch (option) {
+                case "x":
+                    System.exit(0);
+                case "n":
+                    setGamesNumber(0);
+                    istrue = true;
+                    introduce();
+                default:
+                    System.out.println("Wciśnięto niewłaściwy klawisz");
+            }
+        }
+
+    }
+
+    private void abortGame() {
+        boolean istrue = false;
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Czy na pewno chcesz zakończyć grę? (y/n)");
+        while(!istrue) {
+            String option = scanner.nextLine();
+            if(option.equals("y")) {
+                istrue = true;
+                System.exit(0);
+            } else if(option.equals("n")) {
+                break;
+            } else {
+                System.out.println("Niedozwolony znak");
+            }
+        }
+    }
+
+    private void startNewGame() {
+        boolean istrue = false;
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Czy na pewno chcesz zakończyć aktualną grę? (y/n)");
+        while(!istrue) {
+            String option = scanner.nextLine();
+            if(option.equals("y")) {
+                setGamesNumber(0);
+                introduce();
+                istrue = true;
+            } else if(option.equals("n")) {
+                break;
+            } else {
+                System.out.println("Niedozwolony znak");
+            }
+        }
+
     }
 
     private void play() {
         printInformation();
         boolean end = false;
-        while(!end) {
-            validator(user1.draw(), computer.draw());
-            System.out.println("Wynik rundy (gracz:komputer) = " + user1.getWinnings() + ":" + computer.getCompWinnings());
-            System.out.println();
+        while (!end) {
+            int userChoice = user1.draw();
+            if (userChoice == 3 || userChoice == 4) {
+                if(userChoice == 3) {
+                    abortGame();
+                } else {
+                    startNewGame();
+                }
 
-            if (computer.getCompWinnings() == gamesNumber) {
-                System.out.println("Wygrywa komputer z wynikiem: " + computer.getCompWinnings() + ":" + user1.getWinnings());
-                end = true;
-            }
-            if (user1.getWinnings() == gamesNumber) {
-                System.out.println("Wygrywa komputer z wynikiem: " + user1.getWinnings() + ":" + computer.getCompWinnings());
-                end = true;
+            } else {
+                validator(userChoice, computer.draw());
+                System.out.println("Wynik rundy (gracz:komputer) = " + user1.getWinnings() + ":" + computer.getCompWinnings());
+                System.out.println();
+
+                if (computer.getCompWinnings() == gamesNumber) {
+                    System.out.println("Wygrywa komputer z wynikiem: " + computer.getCompWinnings() + ":" + user1.getWinnings());
+                    end = true;
+                }
+                if (user1.getWinnings() == gamesNumber) {
+                    System.out.println("Wygrywa komputer z wynikiem: " + user1.getWinnings() + ":" + computer.getCompWinnings());
+                    end = true;
+                }
             }
         }
     }
 
     private void validator(int userChoice, int computerChoice) {
+
         if (userChoice == 0 && computerChoice == 1) {
             System.out.println("Papier bije kamień. Wygrywa komputer");
             computer.addCompWinnings();
@@ -55,7 +126,6 @@ public class Board {
             System.out.println("Nożyce biją kamień. Wygrywa " + user1.getName());
             user1.addWinnings();
         } else System.out.println("Remis");
-
     }
 
 

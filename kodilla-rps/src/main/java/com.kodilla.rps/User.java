@@ -10,22 +10,40 @@ public class User {
 
     public int draw(){
         int result = -1;
-        System.out.print ("Wykonaj ruch: ");
         Scanner scanner = new Scanner(System.in);
-        String choice = scanner.nextLine();
-        switch(choice) {
-            case "1":
-                System.out.println("Zagrano kamień");
-                result = 0;
-                break;
-            case "2":
-                System.out.println("Zagrano papier");
-                result = 1;
-                break;
-            case "3":
-                System.out.println("Zagrano nożyce");
-                result = 2;
-                break;
+        boolean istrue = true;
+
+        while(istrue) {
+            System.out.print ("Wykonaj ruch: ");
+            String choice = scanner.nextLine();
+            switch(choice) {
+                case "1":
+                    System.out.println(getName() + " zagrał/a kamień");
+                    result = 0;
+                    istrue = false;
+                    break;
+                case "2":
+                    System.out.println(getName() + " zagrał/a papier");
+                    result = 1;
+                    istrue = false;
+                    break;
+                case "3":
+                    System.out.println(getName() + " zagrał/a nożyce");
+                    result = 2;
+                    istrue = false;
+                    break;
+                case "x":
+                    result = 3;
+                    istrue = false;
+                    break;
+                case "n":
+                    result = 4;
+                    istrue = false;
+                    break;
+                default:
+                    System.out.println("Użyto niedozwolonego klawisza");
+
+            }
         }
         return result;
     }
