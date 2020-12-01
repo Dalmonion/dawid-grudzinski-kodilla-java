@@ -1,3 +1,5 @@
+package com.kodilla.rps.old;
+
 import java.util.Scanner;
 
 public class User {

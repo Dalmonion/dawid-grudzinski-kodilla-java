@@ -1,6 +1,8 @@
+package com.kodilla.rps.old;
+
 import java.util.Random;
 
-public class Computer {
+public class computer1 {
     private int CompWinnings = 0;
 
     public int draw() {
