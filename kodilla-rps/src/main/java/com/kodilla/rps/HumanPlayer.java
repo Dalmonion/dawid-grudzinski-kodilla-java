@@ -7,6 +7,6 @@ public class HumanPlayer extends Player {
 
     @Override
     public int getMove() {
-        return IOService.humanChoice();
+        return IOService.humanChoice(this);
     }
 }

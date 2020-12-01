@@ -38,6 +38,7 @@ public class IOService {
         int choice;
         do {
             choice = scanner.nextInt();
+            scanner.nextLine();
             if (choice > 0) {
                 return choice;
             } else {
@@ -49,20 +50,19 @@ public class IOService {
         return -1;
     }
 
-    public static int humanChoice() {
+    public static int humanChoice(Player player) {
         String choice;
         System.out.println("Podaj swój wybór:\n1. Kamień,\n2. Papier,\n3. Nożyce");
         do {
-            scanner.nextLine();
             choice = scanner.nextLine();
             if ("1".equals(choice)) {
-                System.out.println("Wybrałeś kamień");
+                System.out.println(player.getName() + " wybrał kamień");
                 return (Integer.parseInt(choice) - 1);
             } else if ("2".equals(choice)) {
-                System.out.println("Wybrałeś papier");
+                System.out.println(player.getName() + " wybrał papier");
                 return (Integer.parseInt(choice) - 1);
             } else if ("3".equals(choice)) {
-                System.out.println("Wybrałeś nożyce");
+                System.out.println(player.getName() + " wybrał nożyce");
                 return (Integer.parseInt(choice) - 1);
             } else {
                 System.out.println("Podany wybór jest nieprawidłowy. Spróbuj jeszcze raz");
@@ -74,10 +74,10 @@ public class IOService {
 
     public static int computerChoice(int compChoice, Player player) {
         if (compChoice == 0) {
-            System.out.println(player.getName() + " wylosowal kamień");
+            System.out.println(player.getName() + " wylosował kamień");
             return 0;
         } else if (compChoice == 1) {
-            System.out.println(player.getName() + " wylosowal papier");
+            System.out.println(player.getName() + " wylosował papier");
             return 1;
         } else if (compChoice == 2) {
             System.out.println(player.getName() + " wylosował nożyce");
