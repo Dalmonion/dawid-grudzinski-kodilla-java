@@ -1,5 +1,6 @@
 package com.kodilla.rps;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class IOService {
@@ -37,22 +38,31 @@ public class IOService {
         System.out.println("Podaj liczbę gier, stanowiącą o wygranej:");
         int choice;
         do {
-            choice = scanner.nextInt();
-            scanner.nextLine();
-            if (choice > 0) {
-                return choice;
-            } else {
-                System.out.println("Podaj liczbę większą od 0");
+            try {
+                choice = scanner.nextInt();
+                scanner.nextLine();
+                if (choice > 0) {
+                    return choice;
+                } else {
+                    System.out.println("Podaj liczbę większą od 0");
+                    choice = 0;
+                }
+            } catch(InputMismatchException a) {
+                System.out.println("Wpisz liczbę");
                 choice = 0;
             }
-
+            scanner.nextLine();
         } while (choice <= 0);
         return -1;
     }
 
+    private static void printChoice() {
+        System.out.println("Podaj swój wybór:\n1. Kamień,\n2. Papier,\n3. Nożyce,\nKlawisz 'x' aby zakończyć grę,\nKlawisz 'n' aby rozpocząć gre od nowa");
+    }
+
     public static int humanChoice(Player player) {
         String choice;
-        System.out.println("Podaj swój wybór:\n1. Kamień,\n2. Papier,\n3. Nożyce");
+        printChoice();
         do {
             choice = scanner.nextLine();
             if ("1".equals(choice)) {
@@ -64,6 +74,12 @@ public class IOService {
             } else if ("3".equals(choice)) {
                 System.out.println(player.getName() + " wybrał nożyce");
                 return (Integer.parseInt(choice) - 1);
+            } else if ("x".equals(choice) || "X".equals(choice)) {
+                choice = abortConfirmation();
+                printChoice();
+            } else if ("n".equals(choice) || "N".equals(choice)) {
+                choice = startNewGame();
+                printChoice();
             } else {
                 System.out.println("Podany wybór jest nieprawidłowy. Spróbuj jeszcze raz");
                 choice = null;
@@ -115,6 +131,60 @@ public class IOService {
         } else {
             System.out.println("Grę wygrywa " + player2.getName() + ", z wynikiem " + player2.getScore() + ":" + player1.getScore());
         }
+    }
+
+    private static String abortConfirmation() {
+        boolean istrue = false;
+
+        System.out.println("Czy na pewno chcesz zakończyć grę? (y/n)");
+        while(!istrue) {
+            String option = scanner.nextLine();
+            if(option.equals("y")) {
+                istrue = true;
+                System.exit(0);
+            } else if(option.equals("n")) {
+                return null;
+            } else {
+                System.out.println("Niedozwolony znak");
+            }
+        }
+        return null;
+    }
+
+    private static String startNewGame() {
+        boolean istrue = false;
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Czy na pewno chcesz zakończyć aktualną grę? (y/n)");
+        while(!istrue) {
+            String option = scanner.nextLine();
+            if(option.equals("y")) {
+                RpsRunner newGame = new RpsRunner();
+                newGame.main(new String[0]);
+                break;
+            } else if(option.equals("n")) {
+                return null;
+            } else {
+                System.out.println("Niedozwolony znak");
+            }
+        }
+        return null;
+    }
+
+    public static void ending() {
+        String choice;
+        do {
+            System.out.println("Wciśnij 'x' aby zakończyć grę lub 'n' aby rozpocząc nową grę.");
+            choice = scanner.nextLine();
+            if ("x".equals(choice) || "X".equals(choice)) {
+                choice = abortConfirmation();
+            } else if ("n".equals(choice) || "N".equals(choice)) {
+                choice = startNewGame();
+            } else {
+                System.out.println("Podany wybór jest nieprawidłowy. Spróbuj jeszcze raz.\nWciśnij 'x' aby zakończyć grę lub 'n' aby rozpocząc nową grę.");
+                choice = null;
+            }
+        } while (choice == null);
     }
 
 

@@ -32,8 +32,6 @@ public class GameProcessor {
         }
 
         IOService.gameWinner(player1, player2);
-
-
-
+        IOService.ending();
     }
 }
