@@ -54,6 +54,7 @@ public class ShapeCollectorTestSuite {
 
             //Then
             assertTrue(result);
+            assertEquals(0, shapeCollector.getShapesListQuantity());
         }
     }
 
