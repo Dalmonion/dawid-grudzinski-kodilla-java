@@ -54,6 +54,12 @@ public class StatisticsTestSuite {
 
         // Then
         assertEquals(posts, statisticsMock.postsCount());
+        assertEquals(1, statisticsMock.commentsCount());
+        assertEquals(3, statisticsMock.userNames().size());
+        assertEquals(0, statisticsAnalyzer.getAverageCommentsPerPost());
+        assertEquals(1/3.0, statisticsAnalyzer.getAverageCommentsPerUser());
+        assertEquals(0, statisticsAnalyzer.getAveragePostsPerUser());
+
     }
 
     @DisplayName("Test when posts count equals 1000")
@@ -69,6 +75,11 @@ public class StatisticsTestSuite {
 
         // Then
         assertEquals(posts, statisticsMock.postsCount());
+        assertEquals(1, statisticsMock.commentsCount());
+        assertEquals(3, statisticsMock.userNames().size());
+        assertEquals(1/1000.0, statisticsAnalyzer.getAverageCommentsPerPost());
+        assertEquals(1/3.0, statisticsAnalyzer.getAverageCommentsPerUser());
+        assertEquals(1000/3.0, statisticsAnalyzer.getAveragePostsPerUser());
     }
 
     @DisplayName("Test when comments count equals 0")
@@ -84,6 +95,11 @@ public class StatisticsTestSuite {
 
         // Then
         assertEquals(comments, statisticsMock.commentsCount());
+        assertEquals(1, statisticsMock.postsCount());
+        assertEquals(3, statisticsMock.userNames().size());
+        assertEquals(0, statisticsAnalyzer.getAverageCommentsPerPost());
+        assertEquals(0, statisticsAnalyzer.getAverageCommentsPerUser());
+        assertEquals(1/3.0, statisticsAnalyzer.getAveragePostsPerUser());
     }
 
     @DisplayName("Test when amount of the posts is greater than amount of the comments")
@@ -102,7 +118,10 @@ public class StatisticsTestSuite {
         // Then
         assertEquals(posts, statisticsMock.postsCount());
         assertEquals(comments, statisticsMock.commentsCount());
+        assertEquals(3, statisticsMock.userNames().size());
         assertEquals(0.1, statisticsAnalyzer.getAverageCommentsPerPost());
+        assertEquals(100/3.0, statisticsAnalyzer.getAverageCommentsPerUser());
+        assertEquals(1000/3.0, statisticsAnalyzer.getAveragePostsPerUser());
     }
 
     @DisplayName("Test when amount of the comments is greater than amount of the posts")
@@ -121,7 +140,10 @@ public class StatisticsTestSuite {
         // Then
         assertEquals(posts, statisticsMock.postsCount());
         assertEquals(comments, statisticsMock.commentsCount());
+        assertEquals(3, statisticsMock.userNames().size());
         assertEquals(10, statisticsAnalyzer.getAverageCommentsPerPost());
+        assertEquals(1000/3.0, statisticsAnalyzer.getAverageCommentsPerUser());
+        assertEquals(100/3.0, statisticsAnalyzer.getAveragePostsPerUser());
     }
 
     @DisplayName("Test when users count equals 0")
@@ -137,6 +159,11 @@ public class StatisticsTestSuite {
 
         // Then
         assertEquals(users, statisticsMock.userNames());
+        assertEquals(1, statisticsMock.postsCount());
+        assertEquals(1, statisticsMock.commentsCount());
+        assertEquals(1, statisticsAnalyzer.getAverageCommentsPerPost());
+        assertEquals(0, statisticsAnalyzer.getAverageCommentsPerUser());
+        assertEquals(0, statisticsAnalyzer.getAveragePostsPerUser());
     }
 
     @DisplayName("Test when users count equals 100")
@@ -152,5 +179,10 @@ public class StatisticsTestSuite {
 
         // Then
         assertEquals(users, statisticsMock.userNames());
+        assertEquals(1, statisticsMock.postsCount());
+        assertEquals(1, statisticsMock.commentsCount());
+        assertEquals(1, statisticsAnalyzer.getAverageCommentsPerPost());
+        assertEquals(1/100.0, statisticsAnalyzer.getAverageCommentsPerUser());
+        assertEquals(1/100.0, statisticsAnalyzer.getAveragePostsPerUser());
     }
 }

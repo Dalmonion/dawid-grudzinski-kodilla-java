@@ -3,12 +3,12 @@ package com.kodilla.testing.statistics;
 public class StatisticsAnalyzer {
 
     private Statistics statistics;
-    private double usersAmount;
-    private double postsAmount;
-    private double commentsAmount;
-    private double averagePostsPerUser = -1;
-    private double averageCommentsPerUser = -1;
-    private double averageCommentsPerPost = -1;
+    private int usersAmount;
+    private int postsAmount;
+    private int commentsAmount;
+    private double averagePostsPerUser;
+    private double averageCommentsPerUser;
+    private double averageCommentsPerPost;
 
     public StatisticsAnalyzer(Statistics statistics) {
         this.statistics = statistics;
@@ -57,20 +57,20 @@ public class StatisticsAnalyzer {
 
         if (postsAmount == 0 && usersAmount != 0 && commentsAmount != 0) {
             averagePostsPerUser = 0;
-            averageCommentsPerUser = commentsAmount / usersAmount;
+            averageCommentsPerUser = (double) commentsAmount / usersAmount;
             averageCommentsPerPost = 0;
         } else if (postsAmount != 0 && usersAmount == 0 && commentsAmount != 0) {
             averagePostsPerUser = 0;
             averageCommentsPerUser = 0;
-            averageCommentsPerPost = commentsAmount / postsAmount;
+            averageCommentsPerPost = (double) commentsAmount / postsAmount;
         } else if (postsAmount != 0 && usersAmount != 0 && commentsAmount == 0){
-            averagePostsPerUser = postsAmount / usersAmount;
+            averagePostsPerUser = (double) postsAmount / usersAmount;
             averageCommentsPerUser = 0;
             averageCommentsPerPost = 0;
         } else {
-            averagePostsPerUser = postsAmount / usersAmount;
-            averageCommentsPerUser = commentsAmount / usersAmount;
-            averageCommentsPerPost = commentsAmount / postsAmount;
+            averagePostsPerUser = (double) postsAmount / usersAmount;
+            averageCommentsPerUser = (double) commentsAmount / usersAmount;
+            averageCommentsPerPost = (double) commentsAmount / postsAmount;
         }
     }
 
