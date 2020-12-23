@@ -159,8 +159,9 @@ public class IOService {
         while(!istrue) {
             String option = scanner.nextLine();
             if(option.equals("y")) {
-                RpsRunner newGame = new RpsRunner();
-                newGame.main(new String[0]);
+//                RpsRunner newGame = new RpsRunner();
+//                newGame.main(new String[0]);
+                GameProcessor.start();
                 break;
             } else if(option.equals("n")) {
                 return null;
@@ -181,7 +182,7 @@ public class IOService {
             } else if ("n".equals(choice) || "N".equals(choice)) {
                 choice = startNewGame();
             } else {
-                System.out.println("Podany wybór jest nieprawidłowy. Spróbuj jeszcze raz.\nWciśnij 'x' aby zakończyć grę lub 'n' aby rozpocząc nową grę.");
+                System.out.println("Podany wybór jest nieprawidłowy. Spróbuj jeszcze raz.\n");
                 choice = null;
             }
         } while (choice == null);
