@@ -26,4 +26,6 @@ public abstract class Player {
 
     public abstract int getMove();
 
+    public abstract int getEnhancedMove(int number);
+
 }

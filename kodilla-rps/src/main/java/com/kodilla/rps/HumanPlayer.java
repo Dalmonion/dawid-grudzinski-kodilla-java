@@ -9,4 +9,9 @@ public class HumanPlayer extends Player {
     public int getMove() {
         return IOService.humanChoice(this);
     }
+
+    @Override
+    public int getEnhancedMove(int number) {
+        return 0;
+    }
 }

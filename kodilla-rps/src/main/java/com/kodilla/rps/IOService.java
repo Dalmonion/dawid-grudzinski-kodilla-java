@@ -57,7 +57,9 @@ public class IOService {
     }
 
     private static void printChoice() {
-        System.out.println("Podaj swój wybór:\n1. Kamień,\n2. Papier,\n3. Nożyce,\nKlawisz 'x' aby zakończyć grę,\nKlawisz 'n' aby rozpocząć gre od nowa");
+        System.out.println("Podaj swój wybór:\n1. Kamień,\n2. Papier,\n3. Nożyce," +
+                "\n4. Jaszczurka,\n5. Spock," +
+                "\nKlawisz 'x' aby zakończyć grę,\nKlawisz 'n' aby rozpocząć gre od nowa");
     }
 
     public static int humanChoice(Player player) {
@@ -65,42 +67,59 @@ public class IOService {
         printChoice();
         do {
             choice = scanner.nextLine();
-            if ("1".equals(choice)) {
-                System.out.println(player.getName() + " wybrał kamień");
-                return (Integer.parseInt(choice) - 1);
-            } else if ("2".equals(choice)) {
-                System.out.println(player.getName() + " wybrał papier");
-                return (Integer.parseInt(choice) - 1);
-            } else if ("3".equals(choice)) {
-                System.out.println(player.getName() + " wybrał nożyce");
-                return (Integer.parseInt(choice) - 1);
-            } else if ("x".equals(choice) || "X".equals(choice)) {
-                choice = abortConfirmation();
-                printChoice();
-            } else if ("n".equals(choice) || "N".equals(choice)) {
-                choice = startNewGame();
-                printChoice();
-            } else {
-                System.out.println("Podany wybór jest nieprawidłowy. Spróbuj jeszcze raz");
-                choice = null;
+
+            switch (choice) {
+                case "1":
+                    System.out.println(player.getName() + " wybrał kamień");
+                    return (Integer.parseInt(choice));
+                case "2":
+                    System.out.println(player.getName() + " wybrał papier");
+                    return (Integer.parseInt(choice));
+                case "3":
+                    System.out.println(player.getName() + " wybrał nożyce");
+                    return (Integer.parseInt(choice));
+                case "4":
+                    System.out.println(player.getName() + " wybrał jaszczurkę");
+                    return (Integer.parseInt(choice));
+                case "5":
+                    System.out.println(player.getName() + " wybrał Spocka");
+                    return (Integer.parseInt(choice));
+                case "x":
+                    choice = abortConfirmation();
+                    printChoice();
+                    break;
+                case "n":
+                    choice = startNewGame();
+                    printChoice();
+                    break;
+                default:
+                    System.out.println("Podany wybór jest nieprawidłowy. Spróbuj jeszcze raz");
+                    choice = null;
             }
         } while (choice == null);
         return -1;
     }
 
     public static int computerChoice(int compChoice, Player player) {
-        if (compChoice == 0) {
-            System.out.println(player.getName() + " wylosował kamień");
-            return 0;
-        } else if (compChoice == 1) {
-            System.out.println(player.getName() + " wylosował papier");
-            return 1;
-        } else if (compChoice == 2) {
-            System.out.println(player.getName() + " wylosował nożyce");
-            return 2;
-        } else {
-            return -1;
-        }
+        switch (compChoice) {
+            case 0:
+                System.out.println(player.getName() + " wylosował kamień");
+                return 1;
+            case 1:
+                System.out.println(player.getName() + " wylosował papier");
+                return 2;
+            case 2:
+                System.out.println(player.getName() + " wylosował nożyce");
+                return 3;
+            case 3:
+                System.out.println(player.getName() + " wylosował jaszczurkę");
+                return 4;
+            case 4:
+                System.out.println(player.getName() + " wylosował Spocka");
+                return 5;
+            default:
+                return -1;
+        }//
     }
 
     public static void presentScore(Player player1, Player player2) {
@@ -108,15 +127,41 @@ public class IOService {
     }
 
     public static void verbalValidation(int option) {
-        if(option == 1) {
-            System.out.println("Kamień bije nożyce");
-        } else if (option == 2) {
-            System.out.println("Nożyce tną papier");
-        } else if (option == 3) {
-            System.out.println("Papier przykrywa kamień");
-        } else {
-            System.out.println("Remis");
-            System.out.println();
+//
+        switch(option) {
+            case 1:
+                System.out.println("Kamień bije nożyce");
+                break;
+            case 2:
+                System.out.println("Nożyce tną papier");
+                break;
+            case 3:
+                System.out.println("Papier przykrywa kamień");
+                break;
+            case 4:
+                System.out.println("Kamień zgniata jaszczurkę");
+                break;
+            case 5:
+                System.out.println("Jaszczurka zatruwa Spocka");
+                break;
+            case 6:
+                System.out.println("Spock łamie nożyce");
+                break;
+            case 7:
+                System.out.println("Nożyce ranią jaszczurkę");
+                break;
+            case 8:
+                System.out.println("Jaszczurka zjada papier");
+                break;
+            case 9:
+                System.out.println("Papier udowadnia błąd Spocka");
+                break;
+            case 10:
+                System.out.println("Spock kruszy kamień");
+                break;
+            default:
+                System.out.println("Remis");
+                System.out.println();
         }
     }
 
@@ -159,9 +204,7 @@ public class IOService {
         while(!istrue) {
             String option = scanner.nextLine();
             if(option.equals("y")) {
-//                RpsRunner newGame = new RpsRunner();
-//                newGame.main(new String[0]);
-                GameProcessor.start();
+                GameProcessor.startGame();
                 break;
             } else if(option.equals("n")) {
                 return null;

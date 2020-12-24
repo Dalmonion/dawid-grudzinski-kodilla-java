@@ -1,46 +1,26 @@
 package com.kodilla.rps;
 
 public class GameProcessor {
-    private Player player1;
-    private Player player2;
-    private Rules rules;
-    private int winningRounds;
+    private final Player player1;
+    private final Player player2;
+    private final Rules rules;
+    private final int winningRounds;
+    private static int playerOption;
 
 
-    public GameProcessor(Player player1, Player player2, Rules rules, int winningRounds) {
+    public GameProcessor(final Player player1, final Player player2, final Rules rules, final int winningRounds) {
         this.player1 = player1;
         this.player2 = player2;
         this.rules = rules;
         this.winningRounds = winningRounds;
     }
 
-    public void startGame() {
-
-        while ((player1.getScore() != winningRounds) && (player2.getScore() != winningRounds)) {
-            IOService.presentScore(player1, player2);
-            int winning = rules.selectionResult(player1.getMove(), player2.getMove());
-
-            if (winning == 1) {
-                player1.addScore();
-                IOService.roundWinner(player1);
-            } else if (winning == 2) {
-                player2.addScore();
-                IOService.roundWinner(player2);
-            } else {
-                IOService.verbalValidation(4);
-            }
-        }
-
-        IOService.gameWinner(player1, player2);
-        IOService.ending();
-    }
-
-    public static void start() {
+    public static void startGame() {
         Player player1;
         Player player2;
         IOService.showWelcomeMessage();
 
-        int playerOption = IOService.getGamePlayerOption();
+        playerOption = IOService.getGamePlayerOption();
         if(playerOption == 1) {
             String playerName = IOService.getPlayerName();
             player1 = new HumanPlayer(playerName);
@@ -57,6 +37,33 @@ public class GameProcessor {
         int winningRounds = IOService.setWinningRounds();
         Rules rules = new RpsRules();
         GameProcessor gameProcessor = new GameProcessor(player1, player2, rules, winningRounds);
-        gameProcessor.startGame();
+        gameProcessor.progressGame();
+    }
+
+    private void progressGame() {
+        while ((player1.getScore() != winningRounds) && (player2.getScore() != winningRounds)) {
+            IOService.presentScore(player1, player2);
+            int winning;
+
+            if (playerOption == 1) {
+                int humanMove = player1.getMove();
+                int computerMove = player2.getEnhancedMove(humanMove);
+                winning = rules.selectionResult(humanMove, computerMove);
+            } else {
+                winning = rules.selectionResult(player1.getMove(), player2.getMove());
+            }
+            if (winning == 1) {
+                player1.addScore();
+                IOService.roundWinner(player1);
+            } else if (winning == 2) {
+                player2.addScore();
+                IOService.roundWinner(player2);
+            } else {
+                IOService.verbalValidation(11);
+            }
+        }
+
+        IOService.gameWinner(player1, player2);
+        IOService.ending();
     }
 }
