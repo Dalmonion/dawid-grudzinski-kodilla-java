@@ -106,7 +106,7 @@ public class ComputerPlayer extends Player {
                     break;
                 }
         }
-
+        IOService.computerChoice(computerChoice-1, this);
         return computerChoice;
     }
 }

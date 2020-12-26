@@ -119,7 +119,7 @@ public class IOService {
                 return 5;
             default:
                 return -1;
-        }//
+        }
     }
 
     public static void presentScore(Player player1, Player player2) {
