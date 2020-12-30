@@ -20,6 +20,6 @@ public class ArrayOperationsTestSuite {
         double average = ArrayOperations.getAverage(intArray);
 
         //Then
-        assertEquals(6.5 , average);
+        assertEquals(6.5 , average, 0.001);
     }
 }

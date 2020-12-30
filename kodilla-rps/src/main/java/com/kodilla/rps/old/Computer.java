@@ -2,7 +2,7 @@ package com.kodilla.rps.old;
 
 import java.util.Random;
 
-public class computer1 {
+public class Computer {
     private int CompWinnings = 0;
 
     public int draw() {
