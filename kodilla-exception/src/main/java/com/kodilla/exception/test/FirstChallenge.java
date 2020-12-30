@@ -10,6 +10,9 @@ public class FirstChallenge {
     }
 
     public static void main(String[] args) {
+        String fruit = "strawberries";
+        String message = fruit.substring(2,5 ) + fruit.substring(5,2) ;
+        System.out.println(fruit.substring(2, 5));
 
         FirstChallenge firstChallenge = new FirstChallenge();
 
