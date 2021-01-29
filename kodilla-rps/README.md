@@ -17,9 +17,9 @@ which can be confirmed with 'y' key or decline with 'n' key.
 
 # Game modes
 There are 3 options to choose:  
-* 1. human vs computer player
-* 2. computer player vs computer player
-* 3. human vs human
+* human vs computer player
+* computer player vs computer player
+* human vs human
 
 When picking option I or III, the game will ask for names in order to assign them for human players.
 
