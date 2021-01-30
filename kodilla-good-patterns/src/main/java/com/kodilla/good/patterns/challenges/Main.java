@@ -1,4 +1,4 @@
-package com.kodilla.good.paterns.challenges;
+package com.kodilla.good.patterns.challenges;
 
 public class Main {
 
@@ -6,6 +6,7 @@ public class Main {
         MovieStore movieStore = new MovieStore();
 
         movieStore.getMovies().entrySet().stream()
-                .filter(e -> e.g)
+                .flatMap(movie -> movie.getValue().stream())
+                .forEach(movie -> System.out.print(movie + "! "));
     }
 }
