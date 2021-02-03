@@ -1,16 +1,19 @@
 package com.kodilla.good.patterns.challenges.aviationcompany;
 
 import java.util.List;
+import java.util.Map;
 
 public class FlightsDto {
     private final List<Flight> departureFlights;
     private final List<Flight> destinationFlights;
-    private final List<Flight> flights;
+    private final Map<Flight, Flight> flightsStopover;
+    private final SearchRequest searchRequest;
 
-    public FlightsDto(final List<Flight> departureFlights, final List<Flight> destinationFlights, final List<Flight> flights) {
+    public FlightsDto(final List<Flight> departureFlights, final List<Flight> destinationFlights, final Map<Flight, Flight> flightsStopover, final SearchRequest searchRequest) {
         this.departureFlights = departureFlights;
         this.destinationFlights = destinationFlights;
-        this.flights = flights;
+        this.flightsStopover = flightsStopover;
+        this.searchRequest = searchRequest;
     }
 
     public List<Flight> getDepartureFlights() {
@@ -21,7 +24,11 @@ public class FlightsDto {
         return destinationFlights;
     }
 
-    public List<Flight> getFlights() {
-        return flights;
+    public Map<Flight, Flight> getFlightsStopover() {
+        return flightsStopover;
+    }
+
+    public SearchRequest getSearchRequest() {
+        return searchRequest;
     }
 }
