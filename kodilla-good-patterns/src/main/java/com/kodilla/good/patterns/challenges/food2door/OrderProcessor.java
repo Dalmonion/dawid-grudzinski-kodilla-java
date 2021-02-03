@@ -1,4 +1,4 @@
-package com.kodilla.good.patterns.challenges.Food2Door;
+package com.kodilla.good.patterns.challenges.food2door;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,7 +25,7 @@ public class OrderProcessor {
         if (isOnList) {
             if (basicInformation.getProductAmount() > 0 && orderRequest.getAmount() <= basicInformation.getProductAmount()) {
                 log.info("Proceeding with order");
-                checker.processExecutor(database, orderRequest.getItem());
+                checker.processExecutor(database, orderRequest.getItem(), orderRequest.getAmount());
                 return new OrderDto(basicInformation.getCompanyName(), basicInformation.getProductName(), orderRequest.getAmount(), true);
 
             } else {

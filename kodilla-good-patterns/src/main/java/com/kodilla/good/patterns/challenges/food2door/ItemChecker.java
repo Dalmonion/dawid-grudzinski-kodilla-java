@@ -1,8 +1,6 @@
-package com.kodilla.good.patterns.challenges.Food2Door;
+package com.kodilla.good.patterns.challenges.food2door;
 
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.Map;
 
 @Slf4j
 public class ItemChecker {
@@ -16,12 +14,12 @@ public class ItemChecker {
         return count > 0 ? true : false;
     }
 
-    public void processExecutor(CompaniesRepository repository, Item item) {
+    public void processExecutor(CompaniesRepository repository, Item item, int amount) {
         int index = -1;
         for (int i = 0; i < repository.getCompanyList().size(); i++) {
             if (repository.getCompanyList().get(i).getCompanyGoods().containsKey(item)) index = i;
         }
 
-        repository.getCompanyList().get(index).process();
+        repository.getCompanyList().get(index).process(item, amount);
     }
 }

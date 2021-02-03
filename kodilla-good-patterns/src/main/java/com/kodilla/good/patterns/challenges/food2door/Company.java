@@ -1,4 +1,4 @@
-package com.kodilla.good.patterns.challenges.Food2Door;
+package com.kodilla.good.patterns.challenges.food2door;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,8 +34,8 @@ public class Company implements ProcessService {
     }
 
     @Override
-    public void process() {
-        log.info("Basic logic for processing order inside the company");
+    public void process(Item item, int amount) {
+        log.info("Basic logic for processing order inside the " + this.companyName + " company");
     }
 
 }
