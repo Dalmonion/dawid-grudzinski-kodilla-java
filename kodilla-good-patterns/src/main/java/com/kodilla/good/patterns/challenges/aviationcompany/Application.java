@@ -5,7 +5,7 @@ public class Application {
         FlightsRepositoryRetriever flightsRepositoryRetriever = new FlightsRepositoryRetriever();
         FlightsRepository flightsRepository = new FlightsRepository(flightsRepositoryRetriever.retrieve());
 
-        SearchProcessor processor = new SearchProcessor(new UserInformationService(), new FlightSearchService(), flightsRepository);
+        FlightSearchService processor = new FlightSearchService(new UserInformationService(), new FlightSearchProcessor(flightsRepository));
         SearchRequest request = new SearchRequest(Location.WARSZAWA.toString(), Location.RZESZOW.toString());
         processor.processSearch(request);
     }

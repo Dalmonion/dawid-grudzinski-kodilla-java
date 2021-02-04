@@ -1,20 +1,21 @@
 package com.kodilla.good.patterns.challenges.food2door;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class OrderRequest {
+    private final Map<Item, Integer> orderList;
 
-    private final Item item;
-    private final int amount;
+    public OrderRequest() {
 
-    public OrderRequest(final Item product, final int item) {
-        this.item = product;
-        this.amount = item;
+        orderList = new HashMap<>();
     }
 
-    public Item getItem() {
-        return item;
+    public Map<Item, Integer> getOrderList() {
+        return orderList;
     }
 
-    public int getAmount() {
-        return amount;
+    public void addItem(Item item, int count) {
+        orderList.put(item, count);
     }
 }

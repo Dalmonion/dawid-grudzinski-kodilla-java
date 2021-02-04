@@ -5,11 +5,12 @@ public class Application {
 
         CompaniesRetriever companiesRetriever = new CompaniesRetriever();
         CompaniesRepository companiesRepository = new CompaniesRepository(companiesRetriever.retrieve());
-        OrderRequest orderRequest = new OrderRequest(new Item("Corn"), 99);
-        OrderRequest orderRequest2 = new OrderRequest(new Item("Apple"), 99);
+
+        OrderRequest orderRequest = new OrderRequest();
+        orderRequest.addItem(new Item("Corn", "ExtraFoodShop"), 99);
+        orderRequest.addItem(new Item("Apple", "HealthyShop"), 99);
 
         OrderProcessor orderProcessor = new OrderProcessor(companiesRepository);
         orderProcessor.processOrder(orderRequest);
-        orderProcessor.processOrder(orderRequest2);
     }
 }

@@ -3,13 +3,21 @@ package com.kodilla.good.patterns.challenges.food2door;
 public class Item {
 
     private final String itemName;
+    private final String supplier;
 
-    public Item(String itemName) {
+    public Item(final String itemName, final String supplier) {
         this.itemName = itemName;
+
+        this.supplier = supplier;
     }
 
     public String getItemName() {
         return itemName;
+    }
+
+
+    public String getSupplier() {
+        return supplier;
     }
 
     @Override
