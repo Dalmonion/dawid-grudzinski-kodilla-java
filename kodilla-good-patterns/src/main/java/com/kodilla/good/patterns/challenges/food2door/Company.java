@@ -31,11 +31,11 @@ public class Company implements ProcessService {
     }
 
     private void deductCountItem(Item item, int count) {
-        for(Map.Entry<Item, Integer> entry : companyGoods.entrySet()) {
-            if(item.getItemName().equals(entry.getKey().getItemName()) && count <= entry.getValue()) {
+        for (Map.Entry<Item, Integer> entry : companyGoods.entrySet()) {
+            if (item.getItemName().equals(entry.getKey().getItemName()) && count <= entry.getValue()) {
                 log.info("Item " + item.getItemName() + "- ordered count: " + count + ", stock count: " + entry.getValue());
                 entry.setValue(entry.getValue() - count);
-                log.info("Stock count after buying "+ item.getItemName() + ": " + entry.getValue());
+                log.info("Stock count after buying " + item.getItemName() + ": " + entry.getValue());
             }
         }
 
@@ -58,7 +58,7 @@ public class Company implements ProcessService {
 
         boolean canOrderAll = true;
 
-            if(canBuyAllList.contains(false)) canOrderAll = false;
+        if (canBuyAllList.contains(false)) canOrderAll = false;
 
         return canOrderAll;
     }

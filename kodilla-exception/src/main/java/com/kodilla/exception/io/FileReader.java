@@ -6,6 +6,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 public class FileReader {
@@ -29,7 +30,7 @@ public class FileReader {
     public void readFile(final String fileName) throws FileReaderException, URISyntaxException {
         ClassLoader classLoader = getClass().getClassLoader();
 
-        try (Stream<String> fileLines = Files.lines(Path.of(classLoader.getResource(fileName).toURI()))) {
+        try (Stream<String> fileLines = Files.lines(Path.of(Objects.requireNonNull(classLoader.getResource(fileName)).toURI()))) {
             fileLines.forEach(System.out::println);
         } catch (IOException e) {
             throw new FileReaderException();

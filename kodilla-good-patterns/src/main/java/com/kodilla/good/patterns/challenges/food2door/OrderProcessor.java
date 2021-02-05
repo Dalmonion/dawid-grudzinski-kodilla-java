@@ -17,8 +17,8 @@ public class OrderProcessor {
         boolean canBuy;
 
         for (Company company : database.getCompanyList()) {
-            for(Map.Entry<Item, Integer> order : orderRequest.getOrderList().entrySet()) {
-                if(company.getCompanyGoods().containsKey(order.getKey())) {
+            for (Map.Entry<Item, Integer> order : orderRequest.getOrderList().entrySet()) {
+                if (company.getCompanyGoods().containsKey(order.getKey())) {
                     canBuy = company.process(orderRequest);
                     if (canBuy) {
                         log.info("Proceeding with order in " + company.getCompanyName());
