@@ -17,6 +17,10 @@ dependencies {
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
+
+    implementation 'org.projectlombok:lombok:1.18.16'
+    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    annotationProcessor 'org.projectlombok:lombok:1.18.16'
 }
 
 test {
