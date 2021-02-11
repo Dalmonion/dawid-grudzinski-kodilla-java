@@ -15,15 +15,12 @@ public class BoardTestSuite {
         ApplicationContext context = new AnnotationConfigApplicationContext("com.kodilla.spring");
 
         //When
-        boolean toDoList = context.containsBean("taskList1");
-        boolean inProgressList = context.containsBean("taskList2");
-        boolean doneList = context.containsBean("taskList3");
+        boolean getBoard = context.containsBean("getBoard");
+        boolean getTaskList = context.containsBean("getTaskList");
 
         //Then
-        assertTrue(toDoList);
-        assertTrue(inProgressList);
-        assertTrue(doneList);
-
+        assertTrue(getBoard);
+        assertTrue(getTaskList);
     }
 
     @Test
