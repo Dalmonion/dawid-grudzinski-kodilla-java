@@ -26,6 +26,10 @@ public class SudokuElement {
         return value;
     }
 
+    public void setValue(int value) {
+        this.value = value;
+    }
+
     public ArrayList<Integer> getRemainingChoices() {
         return new ArrayList<>(remainingChoices);
     }
