@@ -7,27 +7,27 @@ public final class GameProcessor {
 
     private void secondOption(SudokuRow row) {
         for (int i = 0; i < row.getRow().size(); i++) {
-
             if (row.getRow().get(i).getValue() != -1) continue;
 
             for (Integer valueFromTable : row.getRow().get(i).getRemainingChoices()) {
-
-                boolean wroteSomewhereElse = false;
                 boolean possibleSomewhereElse = false;
 
                 for (int j = 0; j < row.getRow().size(); j++) {
-                    if (row.getRow().get(j).getValue() == valueFromTable) wroteSomewhereElse = true;
-
-                    for (Integer remainingChoice : row.getRow().get(j).getRemainingChoices()) {
-                        if (remainingChoice == valueFromTable) {
-                            possibleSomewhereElse = true;
-                            break;
+                    if (i == j) continue;
+                    if (row.getRow().get(j).getValue() == valueFromTable) break;
+                    if (row.getRow().get(j).getValue() == -1) {
+                        for (Integer remainingChoice : row.getRow().get(j).getRemainingChoices()) {
+                            if (remainingChoice == valueFromTable) {
+                                possibleSomewhereElse = true;
+                                break;
+                            }
                         }
-
                     }
                 }
-
-
+                if (!possibleSomewhereElse) {
+                    row.getRow().get(i).setValue(valueFromTable);
+                    break;
+                }
             }
         }
     }
@@ -49,6 +49,7 @@ public final class GameProcessor {
                 }
             }
         }
+        secondOption(row);
         return true;
     }
 

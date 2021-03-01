@@ -31,6 +31,7 @@ public final class SudokuElement {
         this.value = value;
     }
 
+
     public List<Integer> getRemainingChoices() {
         return new ArrayList<>(remainingChoices);
     }

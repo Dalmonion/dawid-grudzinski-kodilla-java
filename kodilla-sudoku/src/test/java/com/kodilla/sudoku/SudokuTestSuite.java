@@ -60,4 +60,29 @@ class SudokuTestSuite {
         assertEquals(5, row.getRow().get(4).getValue());
 
     }
+
+    @DisplayName("Testing if algorithm adds first value from remaining choices array where there is no " +
+            "use of such value neither in all remaining fields or theirs arrays")
+    @Test
+    void testSecondOption() {
+        //Given
+        GameProcessor processor = new GameProcessor();
+        SudokuRow row = new SudokuRow();
+        row.getRow().get(0).setValue(1);
+        row.getRow().get(1).setValue(2);
+        row.getRow().get(3).setValue(3);
+        row.getRow().get(4).setValue(5);
+        row.getRow().get(5).setValue(6);
+        row.getRow().get(6).setValue(7);
+        row.getRow().get(7).setValue(8);
+        row.getRow().get(8).setValue(8);
+
+        //When
+        processor.processRow(row);
+
+        //Then
+        assertEquals(4, row.getRow().get(2).getValue());
+    }
+
+
 }
