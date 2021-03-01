@@ -31,11 +31,16 @@ public final class SudokuElement {
         this.value = value;
     }
 
-    public ArrayList<Integer> getRemainingChoices() {
+    public List<Integer> getRemainingChoices() {
         return new ArrayList<>(remainingChoices);
     }
 
-    public void removeChoice(int choice) {
-        remainingChoices.remove(choice);
+    public boolean removeChoice(int choice) {
+        int size = remainingChoices.size();
+        for (int i = 0; i < remainingChoices.size(); i++) {
+            if (choice == remainingChoices.get(i)) remainingChoices.remove(i);
+        }
+
+        return size > remainingChoices.size();
     }
 }
