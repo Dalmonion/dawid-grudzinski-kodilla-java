@@ -12,7 +12,7 @@ public final class SudokuRow {
         }
     }
 
-    public List<SudokuElement> getRow() {
+    public List<SudokuElement> getElements() {
         return row;
     }
 }

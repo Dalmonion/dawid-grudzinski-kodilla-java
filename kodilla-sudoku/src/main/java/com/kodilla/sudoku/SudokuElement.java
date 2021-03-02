@@ -1,17 +1,15 @@
 package com.kodilla.sudoku;
 
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public final class SudokuElement {
     private static final int EMPTY =  -1;
 
     private int value;
     private final Integer choiceArray [] = new Integer[] {1, 2, 3, 4, 5, 6, 7, 8, 9};
-    private List<Integer> remainingChoices = new ArrayList<>(Arrays.asList(choiceArray));
+    private List<Integer> remainingChoices1 = new ArrayList<>(Arrays.asList(choiceArray));
+    private Set<Integer> remainingChoices = new HashSet<>(Arrays.asList(choiceArray));
 
 
     public SudokuElement() {
@@ -38,9 +36,10 @@ public final class SudokuElement {
 
     public boolean removeChoice(int choice) {
         int size = remainingChoices.size();
-        for (int i = 0; i < remainingChoices.size(); i++) {
-            if (choice == remainingChoices.get(i)) remainingChoices.remove(i);
-        }
+//        for (int i = 0; i < remainingChoices.size(); i++) {
+//            if (choice == remainingChoices.get(i)) remainingChoices.remove(i);
+//        }
+        remainingChoices.remove(choice);
 
         return size > remainingChoices.size();
     }
