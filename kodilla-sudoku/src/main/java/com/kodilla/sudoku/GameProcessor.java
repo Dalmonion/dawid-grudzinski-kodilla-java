@@ -2,10 +2,11 @@ package com.kodilla.sudoku;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public final class GameProcessor {
 
-    public boolean processRow(SudokuRow row) {
+    public void processRow(SudokuRow row) {
         for (int i = 0; i < row.getElements().size(); i++) {
 
             if (row.getElements().get(i).getValue() != -1) continue;
@@ -28,7 +29,6 @@ public final class GameProcessor {
         } catch (OutOfChoicesException e) {
             System.out.println(e);
         }
-        return true;
     }
 
     public boolean isInDifferentField(SudokuRow row, int value) {
@@ -68,7 +68,22 @@ public final class GameProcessor {
         }
     }
 
-    public List<SudokuRow> extractColumn(SudokuBoard board) {
+    public void processColumn(SudokuBoard board) {
+        List<SudokuRow> columns = extractColumns(board);
+
+        for (int i = 0; i < columns.size(); i++) {
+            processRow(columns.get(i));
+        }
+
+        for (int i = 0; i < board.getRows().size(); i++) {
+            for (int j = 0; j < board.getRows().size(); j++) {
+                board.getRows().get(j).getElements().add(i, columns.get(i).getElements().get(j));
+                board.getRows().get(j).getElements().remove(j + 1);
+            }
+        }
+    }
+
+    public List<SudokuRow> extractColumns(SudokuBoard board) {
         List<SudokuRow> columns = new ArrayList<>();
 
         for (int i = 0; i < board.getRows().size(); i++) {
@@ -82,7 +97,15 @@ public final class GameProcessor {
         return columns;
     }
 
-    public List<SudokuRow> extractBlock(SudokuBoard board) {
+    public void processSection(SudokuBoard board) {
+       List<SudokuRow> sections = extractBlocks(board);
+
+       for (int i = 0; i < sections.size(); i++) {
+           processRow(sections.get(i));
+       }
+    }
+
+    public List<SudokuRow> extractBlocks(SudokuBoard board) {
         List<SudokuRow> sections = new ArrayList<>();
 
         for (int i = 0; i < 3; i++) {
@@ -101,9 +124,22 @@ public final class GameProcessor {
     }
 
     public boolean process(SudokuBoard board) {
+
+        List<SudokuRow> sections = extractBlocks(board);
+
         for (int i = 0; i < board.getRows().size(); i++) {
             processRow(board.getRows().get(i));
         }
+
+        processColumn(board);
+
+
+
+        for (int i = 0; i < sections.size(); i++) {
+            processRow(sections.get(i));
+        }
+
+
 
         return true;
     }

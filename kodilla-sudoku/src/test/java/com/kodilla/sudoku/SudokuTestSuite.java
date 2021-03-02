@@ -167,7 +167,7 @@ class SudokuTestSuite {
         System.out.println(board.toString());
 
         //When
-        List<SudokuRow> result = processor.extractColumn(board);
+        List<SudokuRow> result = processor.extractColumns(board);
         for (int i = 0; i < result.size(); i++) {
             for (int j = 0; j < result.get(i).getElements().size(); j++) {
                 System.out.print(result.get(i).getElements().get(j).getValue() + ", ");
@@ -208,7 +208,7 @@ class SudokuTestSuite {
         System.out.println(board.toString());
 
         //When
-        List<SudokuRow> result = processor.extractBlock(board);
+        List<SudokuRow> result = processor.extractBlocks(board);
         for (int i = 0; i < result.size(); i++) {
             for (int j = 0; j < result.get(i).getElements().size(); j++) {
                 System.out.print(result.get(i).getElements().get(j).getValue() + ", ");
@@ -249,10 +249,31 @@ class SudokuTestSuite {
                 .map(e -> e.getValue())
                 .forEach(System.out::print);
 
-
         //When & Then
         assertThrows(OutOfChoicesException.class, () -> processor.thirdOption(row));
 
+    }
+
+    @DisplayName("Testing if processColumn method moves values to main board columns in correct order")
+    @Test
+    void testUpdateColumns() {
+        //Given
+        GameProcessor processor = new GameProcessor();
+        SudokuBoard board = new SudokuBoard();
+        for (int i = 0; i < board.getRows().size(); i++) {
+            board.getRows().get(i).getElements().get(0).setValue(1 + i);
+        }
+        board.getRows().get(3).getElements().get(0).setValue(-1);
+        board.getRows().get(6).getElements().get(0).setValue(-1);
+        board.getRows().get(8).getElements().get(0).setValue(-1);
+
+        //When
+        processor.processColumn(board);
+
+        //Then
+        assertEquals(4, board.getRows().get(3).getElements().get(0).getValue());
+        assertEquals(7, board.getRows().get(6).getElements().get(0).getValue());
+        assertEquals(9, board.getRows().get(8).getElements().get(0).getValue());
     }
 
 
