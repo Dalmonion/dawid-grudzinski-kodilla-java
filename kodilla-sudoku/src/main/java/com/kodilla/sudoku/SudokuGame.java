@@ -29,7 +29,6 @@ public class SudokuGame {
         }
 
         System.out.println("Processing with the game");
-//        processor.processRow(board.getRows().get(0));
         processor.process(board);
         System.out.println(board.toString());
 

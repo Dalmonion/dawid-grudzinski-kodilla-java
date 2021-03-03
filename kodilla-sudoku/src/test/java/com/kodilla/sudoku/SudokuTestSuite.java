@@ -1,6 +1,7 @@
 package com.kodilla.sudoku;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -98,7 +99,7 @@ class SudokuTestSuite {
     }
 
     @DisplayName("Testing if algorithm adds first value from remaining choices array where there is no " +
-            "use of such value neither in all remaining fields or theirs arrays")
+            "use of such value neither in all remaining fields or theirs remainingChoice arrays")
     @Test
     void testSecondOption() {
         //Given
@@ -112,15 +113,17 @@ class SudokuTestSuite {
         row.getElements().get(6).setValue(7);
         row.getElements().get(7).setValue(8);
         row.getElements().get(8).setValue(8);
+
         IntStream.range(0, row.getElements().size())
                 .forEach(n -> System.out.print(row.getElements().get(n).getValue()));
 
         //When
-        processor.processRow(row);
         System.out.println();
+        processor.secondOption(row);
+//        System.out.println();
         IntStream.range(0, row.getElements().size())
                 .forEach(n -> System.out.print(row.getElements().get(n).getValue()));
-        System.out.println();
+
 
         //Then
         assertEquals(4, row.getElements().get(2).getValue());
@@ -131,7 +134,7 @@ class SudokuTestSuite {
     void testBoardClone() {
         //Given
         SudokuBoard board = new SudokuBoard();
-        for (int i = 0; i < 9; i ++) {
+        for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 board.getRows().get(i).getElements().get(j).setValue(j + 1);
             }
@@ -185,7 +188,7 @@ class SudokuTestSuite {
         //Then
         assertEquals(9, result.size());
         assertFalse(result.get(0).getElements().contains(2));
-        assertTrue( containsOnlyOne);
+        assertTrue(containsOnlyOne);
         assertTrue(containsOnlyFive);
 
     }
@@ -260,20 +263,127 @@ class SudokuTestSuite {
         //Given
         GameProcessor processor = new GameProcessor();
         SudokuBoard board = new SudokuBoard();
+
         for (int i = 0; i < board.getRows().size(); i++) {
             board.getRows().get(i).getElements().get(0).setValue(1 + i);
         }
         board.getRows().get(3).getElements().get(0).setValue(-1);
         board.getRows().get(6).getElements().get(0).setValue(-1);
         board.getRows().get(8).getElements().get(0).setValue(-1);
-
+        System.out.println(board.toString());
         //When
         processor.processColumn(board);
-
+        System.out.println(board.toString());
         //Then
         assertEquals(4, board.getRows().get(3).getElements().get(0).getValue());
         assertEquals(7, board.getRows().get(6).getElements().get(0).getValue());
         assertEquals(9, board.getRows().get(8).getElements().get(0).getValue());
+    }
+
+    @DisplayName("Testing if processSections method moves values to main board columns in correct order")
+    @Test
+    void testUpdateSections() {
+        //Given
+        GameProcessor processor = new GameProcessor();
+        SudokuBoard board = new SudokuBoard();
+
+        board.getRows().get(0).getElements().get(0).setValue(1);
+        board.getRows().get(0).getElements().get(1).setValue(-1);
+        board.getRows().get(0).getElements().get(2).setValue(-1);
+        board.getRows().get(1).getElements().get(0).setValue(5);
+        board.getRows().get(1).getElements().get(1).setValue(-1);
+        board.getRows().get(1).getElements().get(2).setValue(2);
+        board.getRows().get(2).getElements().get(0).setValue(8);
+        board.getRows().get(2).getElements().get(1).setValue(-1);
+        board.getRows().get(2).getElements().get(2).setValue(4);
+
+        board.getRows().get(6).getElements().get(6).setValue(1);
+        board.getRows().get(6).getElements().get(7).setValue(-1);
+        board.getRows().get(6).getElements().get(8).setValue(-1);
+        board.getRows().get(7).getElements().get(6).setValue(5);
+        board.getRows().get(7).getElements().get(7).setValue(-1);
+        board.getRows().get(7).getElements().get(8).setValue(2);
+        board.getRows().get(8).getElements().get(6).setValue(8);
+        board.getRows().get(8).getElements().get(7).setValue(-1);
+        board.getRows().get(8).getElements().get(8).setValue(4);
+        System.out.println(board.toString());
+
+        //When
+        processor.processSection(board);
+        System.out.println(board.toString());
+
+        //Then
+        assertEquals(3, board.getRows().get(0).getElements().get(1).getValue());
+        assertEquals(6, board.getRows().get(0).getElements().get(2).getValue());
+        assertEquals(7, board.getRows().get(1).getElements().get(1).getValue());
+        assertEquals(9, board.getRows().get(2).getElements().get(1).getValue());
+        assertEquals(3, board.getRows().get(6).getElements().get(7).getValue());
+        assertEquals(6, board.getRows().get(6).getElements().get(8).getValue());
+        assertEquals(7, board.getRows().get(7).getElements().get(7).getValue());
+        assertEquals(9, board.getRows().get(8).getElements().get(7).getValue());
+
+    }
+
+    @DisplayName("Testing process method for solving basic sudoku board")
+    @Test
+    void testProcess() {
+        //Given
+        GameProcessor processor = new GameProcessor();
+        SudokuBoard board = new SudokuBoard();
+
+        board.getRows().get(0).getElements().get(3).setValue(2);
+        board.getRows().get(0).getElements().get(4).setValue(6);
+        board.getRows().get(0).getElements().get(6).setValue(7);
+        board.getRows().get(0).getElements().get(8).setValue(1);
+
+        board.getRows().get(1).getElements().get(0).setValue(6);
+        board.getRows().get(1).getElements().get(1).setValue(8);
+        board.getRows().get(1).getElements().get(4).setValue(7);
+        board.getRows().get(1).getElements().get(7).setValue(9);
+
+        board.getRows().get(2).getElements().get(0).setValue(1);
+        board.getRows().get(2).getElements().get(1).setValue(9);
+        board.getRows().get(2).getElements().get(5).setValue(4);
+        board.getRows().get(2).getElements().get(6).setValue(5);
+
+        board.getRows().get(3).getElements().get(0).setValue(8);
+        board.getRows().get(3).getElements().get(1).setValue(2);
+        board.getRows().get(3).getElements().get(3).setValue(1);
+        board.getRows().get(3).getElements().get(7).setValue(4);
+
+        board.getRows().get(4).getElements().get(2).setValue(4);
+        board.getRows().get(4).getElements().get(3).setValue(6);
+        board.getRows().get(4).getElements().get(5).setValue(2);
+        board.getRows().get(4).getElements().get(6).setValue(9);
+
+        board.getRows().get(5).getElements().get(1).setValue(5);
+        board.getRows().get(5).getElements().get(5).setValue(3);
+        board.getRows().get(5).getElements().get(7).setValue(2);
+        board.getRows().get(5).getElements().get(8).setValue(8);
+
+        board.getRows().get(6).getElements().get(2).setValue(9);
+        board.getRows().get(6).getElements().get(3).setValue(3);
+        board.getRows().get(6).getElements().get(7).setValue(7);
+        board.getRows().get(6).getElements().get(8).setValue(4);
+
+        board.getRows().get(7).getElements().get(1).setValue(4);
+        board.getRows().get(7).getElements().get(4).setValue(5);
+        board.getRows().get(7).getElements().get(7).setValue(3);
+        board.getRows().get(7).getElements().get(8).setValue(6);
+
+        board.getRows().get(8).getElements().get(0).setValue(7);
+        board.getRows().get(8).getElements().get(2).setValue(3);
+        board.getRows().get(8).getElements().get(4).setValue(1);
+        board.getRows().get(8).getElements().get(5).setValue(8);
+
+        System.out.println(board.toString());
+
+        //When
+        processor.process(board);
+        System.out.println(board.toString());
+
+        //Then
+
     }
 
 

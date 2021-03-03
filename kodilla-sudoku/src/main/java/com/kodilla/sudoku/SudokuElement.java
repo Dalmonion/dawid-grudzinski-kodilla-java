@@ -8,7 +8,7 @@ public final class SudokuElement {
 
     private int value;
     private final Integer choiceArray [] = new Integer[] {1, 2, 3, 4, 5, 6, 7, 8, 9};
-    private List<Integer> remainingChoices1 = new ArrayList<>(Arrays.asList(choiceArray));
+//    private List<Integer> remainingChoices1 = new ArrayList<>(Arrays.asList(choiceArray));
     private Set<Integer> remainingChoices = new HashSet<>(Arrays.asList(choiceArray));
 
 
@@ -42,5 +42,23 @@ public final class SudokuElement {
         remainingChoices.remove(choice);
 
         return size > remainingChoices.size();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SudokuElement element = (SudokuElement) o;
+
+        if (value != element.value) return false;
+        return hashCode() == o.hashCode();
+    }
+
+    @Override
+    public int hashCode() {
+        int result = value;
+        result = 31 * result + remainingChoices.hashCode();
+        return result;
     }
 }
