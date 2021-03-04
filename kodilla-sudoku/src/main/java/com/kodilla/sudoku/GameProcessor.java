@@ -12,7 +12,7 @@ public final class GameProcessor {
                 if (board.getRows().get(i).getElements().get(j).getValue() != -1) continue;
                 processRowNowe(board.getRows().get(i), j);
                 processColumnNowe(board, j, i);
-//                processSectionNowe(i,j);
+                processSectionNowe(board, j, i);
             }
         }
         return true;
@@ -58,12 +58,12 @@ public final class GameProcessor {
 
     }
 
-    public SudokuRow extractColumnNowe(SudokuBoard board, int index) {
+    public SudokuRow extractColumnNowe(SudokuBoard board, int columnNumber) {
 
         SudokuRow column = new SudokuRow();
         column.getElements().clear();
         for (int i = 0; i < board.getRows().size(); i++) {
-            column.getElements().add(board.getRows().get(i).getElements().get(index));
+            column.getElements().add(board.getRows().get(i).getElements().get(columnNumber));
         }
         return column;
     }
@@ -80,6 +80,87 @@ public final class GameProcessor {
         SudokuRow column = extractColumnNowe(board, columnIndex);
         processRowNowe(column, valueIndex);
         injectColumnNowe(column, board, columnIndex);
+    }
+
+    public int[] sectionGuesser(int row, int column) {
+        int sectionColumnNumber = -1;
+        int sectionRowNumber = -1;
+        if (row < 3) {
+            if (column < 3) {
+                sectionColumnNumber = 0;
+                sectionRowNumber = 0;
+            } else if (column > 2 && column < 6) {
+                sectionColumnNumber = 1;
+                sectionRowNumber = 0;
+            } else {
+                sectionColumnNumber = 2;
+                sectionRowNumber = 0;
+            }
+        } else if (row > 2 && row < 6) {
+            if (column < 3) {
+                sectionColumnNumber = 0;
+                sectionRowNumber = 1;
+            } else if (column > 2 && column < 6) {
+                sectionColumnNumber = 1;
+                sectionRowNumber = 1;
+            } else {
+                sectionColumnNumber = 2;
+                sectionRowNumber = 1;
+            }
+        } else {
+            if (column < 3) {
+                sectionColumnNumber = 0;
+                sectionRowNumber = 2;
+            } else if (column > 2 && column < 6) {
+                sectionColumnNumber = 1;
+                sectionRowNumber = 2;
+            } else {
+                sectionColumnNumber = 2;
+                sectionRowNumber = 2;
+            }
+        }
+        return new int[]{sectionColumnNumber, sectionRowNumber};
+    }
+
+    public SudokuRow extractSectionNowe(SudokuBoard board, int row, int column) {
+        SudokuRow section = new SudokuRow();
+        section.getElements().clear();
+        int[] guesser = sectionGuesser(row, column);
+        int sectionColumnNumber = guesser [0];
+        int sectionRowNumber = guesser [1];
+
+        for (int i = 3 * sectionRowNumber; i < 3 + (3 * sectionRowNumber); i++) {
+            for (int j = 3 * sectionColumnNumber; j < 3 + (3 * sectionColumnNumber); j++) {
+                section.getElements().add(board.getRows().get(i).getElements().get(j));
+            }
+        }
+        return section;
+    }
+
+    public void injectSectionNowe(SudokuRow row, SudokuBoard board, int rowIndex, int columnIndex) {
+        int[] guesser = sectionGuesser(rowIndex, columnIndex);
+        int sectionColumnNumber = guesser [0];
+        int sectionRowNumber = guesser [1];
+
+        for (int i = 3 * sectionRowNumber; i < 3 + (3 * sectionRowNumber); i++) {
+            for (int j = 3 * sectionColumnNumber; j < 3 + (3 * sectionColumnNumber); j++) {
+                board.getRows().get(i).getElements().add(j, row.getElements().get(0));
+                row.getElements().remove(0);
+                board.getRows().get(i).getElements().remove(j + 1);
+            }
+        }
+    }
+
+    public void processSectionNowe(SudokuBoard board, int columnIndex, int rowIndex) {
+        SudokuRow section = extractSectionNowe(board, rowIndex, columnIndex);
+        for (int i = 0; i < section.getElements().size(); i++) {
+            if (section.getElements().get(i).getValue() == -1) {
+                processRowNowe(section, i);
+                break;
+            }
+
+        }
+        injectSectionNowe(section, board, rowIndex, columnIndex);
     }
 
     public void processRow(SudokuRow row) {

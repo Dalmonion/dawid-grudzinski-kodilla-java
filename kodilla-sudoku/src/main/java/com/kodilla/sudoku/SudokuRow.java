@@ -11,7 +11,6 @@ public final class SudokuRow {
             row.add(new SudokuElement());
         }
     }
-
     public List<SudokuElement> getElements() {
         return row;
     }
