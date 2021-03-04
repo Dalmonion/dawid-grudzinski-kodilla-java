@@ -51,7 +51,7 @@ public final class SudokuBoard extends Prototype<SudokuBoard>{
 
             for (int j = 0; j < board.get(i).getElements().size(); j++) {
                 if (board.get(i).getElements().get(j).getValue() == -1) {
-                    result.append("0 ");
+                    result.append(". ");
                 } else {
                     result.append(board.get(i).getElements().get(j).getValue() + " ");
                 }

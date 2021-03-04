@@ -9,16 +9,16 @@ public final class SudokuElement {
     private int value;
     private final Integer choiceArray [] = new Integer[] {1, 2, 3, 4, 5, 6, 7, 8, 9};
 //    private List<Integer> remainingChoices1 = new ArrayList<>(Arrays.asList(choiceArray));
-    private Set<Integer> remainingChoices = new HashSet<>(Arrays.asList(choiceArray));
+    private ArrayList<Integer> remainingChoices;
 
 
     public SudokuElement() {
         value = EMPTY;
+        remainingChoices = new ArrayList<>(Arrays.asList(choiceArray));
     }
 
     public SudokuElement(int value) {
         this.value = value;
-        remainingChoices.remove(value);
     }
 
     public int getValue() {
@@ -26,7 +26,13 @@ public final class SudokuElement {
     }
 
     public void setValue(int value) {
-        this.value = value;
+        if (value == EMPTY) {
+            this.value = EMPTY;
+            remainingChoices = new ArrayList<>(Arrays.asList(choiceArray));
+        } else {
+            this.value = value;
+            remainingChoices.clear();
+        }
     }
 
 
@@ -34,14 +40,11 @@ public final class SudokuElement {
         return new ArrayList<>(remainingChoices);
     }
 
-    public boolean removeChoice(int choice) {
-        int size = remainingChoices.size();
+    public void removeChoice(int choice) {
 //        for (int i = 0; i < remainingChoices.size(); i++) {
 //            if (choice == remainingChoices.get(i)) remainingChoices.remove(i);
 //        }
-        remainingChoices.remove(choice);
-
-        return size > remainingChoices.size();
+        remainingChoices.remove(new Integer(choice));
     }
 
     @Override
