@@ -54,7 +54,9 @@ In case such an exception occurs it's being handled in followed way:
 - if there are objects in the backtrack array, the last position is being opened,
 - the board state is being loaded from that object,
 - before guessed value is being deleted from the present field (after restoring board state) remaining choices array,
-- [algorithm](#algorithm) continues its work.
+- [algorithm](#algorithm) 
+
+If backtrack objects array is empty, the algorithm will inform the user that entered board is incorrect.
 
 # Technologies
 Project is created with:
