@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 public final class GameProcessor {
-
     private static List<Backtrack> backtracks = new ArrayList<>();
+    static int counter = 0;
 
     public int numberGuesser(SudokuBoard board, int rowIndex, int columnIndex) {
         int pickedValue = -1;
@@ -14,64 +14,194 @@ public final class GameProcessor {
         return pickedValue;
     }
 
-    public boolean processNowe(SudokuBoard board) {
+    public SudokuResult processNowe(SudokuBoard board) {
         for (int i = 0; i < board.getRows().size(); i++) {
             for (int j = 0; j < board.getRows().get(i).getElements().size(); j++) {
                 if (board.getRows().get(i).getElements().get(j).getValue() != -1) continue;
+                counter++;
                 boolean anyActionOnRow = false;
                 boolean anyActionOnColumn = false;
                 boolean anyActionOnSection = false;
                 try {
-                    anyActionOnRow = processRowNowe(board.getRows().get(i), j);
-                    anyActionOnColumn = processColumnNowe(board, j, i);
-                    anyActionOnSection = processSectionNowe(board, j, i);
+
+                    anyActionOnRow = processRowNowe(board, board.getRows().get(i), j, i);
+                    if (!anyActionOnRow) {
+                        anyActionOnColumn = processColumnnnnnnnnnnnnnnnnnnnNowe(board, j, i);
+                        if (!anyActionOnColumn && !board.getRows().get(i).getElements().get(j).getRemainingChoices().isEmpty())
+                            anyActionOnSection = processSectionnnnnnnnnnnnnnnnNowe(board, j, i);
+
+                    }
+
+
                 } catch (OutOfChoicesException e) {
-                    if (backtracks.size() > 0) {
+                    if (!backtracks.isEmpty()) {
                         board = backtracks.get(backtracks.size() - 1).getSavedBoard();
                         i = backtracks.get(backtracks.size() - 1).getRowValue();
-                        j = backtracks.get(backtracks.size() - 1).getColumnValue();
-                        board.getRows().get(i).getElements().get(j).removeChoice(backtracks.get(backtracks.size() - 1).getGuessedValue());
+                        j = backtracks.get(backtracks.size() - 1).getColumnValue() - 1;
+                        board.getRows().get(i).getElements().get(j + 1).removeChoice(backtracks.get(backtracks.size() - 1).getGuessedValue());
                         backtracks.remove(backtracks.size() - 1);
+                        continue;
                     } else {
                         System.out.println("Entered Sudoku is incorrect!");
-                        System.exit(0);
+                        SudokuResult result = new SudokuResult(board, false);
+                        return result;
                     }
                 }
 
 
                 if (!anyActionOnRow && !anyActionOnColumn && !anyActionOnSection) {
+//                    if (board.getRows().get(i).getElements().get(j).getRemainingChoices().isEmpty()) {
+//                        board = backtracks.get(backtracks.size() - 1).getSavedBoard();
+//                        i = backtracks.get(backtracks.size() - 1).getRowValue();
+//                        j = backtracks.get(backtracks.size() - 1).getColumnValue() - 1;
+//                        board.getRows().get(i).getElements().get(j + 1).removeChoice(backtracks.get(backtracks.size() - 1).getGuessedValue());
+//                        backtracks.remove(backtracks.size() - 1);
+//                    } else {
                     int pickedValue = numberGuesser(board, i, j);
                     Backtrack backtrack = new Backtrack(i, j, pickedValue, board);
                     backtracks.add(backtrack);
                     board.getRows().get(i).getElements().get(j).setValue(pickedValue);
+//                    }
                 }
             }
         }
-        return true;
+        SudokuResult result = null;
+        try {
+            result = new SudokuResult(board.deepCopy(), true);
+        } catch (CloneNotSupportedException e) {
+            System.out.println(e);
+        }
+        return result;
     }
 
-    public boolean processRowNowe(SudokuRow row, int index) throws OutOfChoicesException {
+    public boolean processRowNowe(SudokuBoard board, SudokuRow row, int columnIndex, int rowIndex) throws OutOfChoicesException {
         boolean anyAction = false;
-        for (Integer valueFromTable : row.getElements().get(index).getRemainingChoices()) {
-            boolean isInDifferentField = isInDifferentField(row, valueFromTable);
-            if (isInDifferentField) row.getElements().get(index).removeChoice(valueFromTable);
-            thirdOptionNowe(row, index);
-            if (row.getElements().get(index).getRemainingChoices().size() == 1) {
-                row.getElements().get(index).setValue(row.getElements().get(index).getRemainingChoices().get(0));
-                anyAction = true;
-                break;
-            }
 
-            boolean isInDifferentArray = isInDifferentArray(row, valueFromTable, row.getElements().get(index));
-            if (!isInDifferentField && !isInDifferentArray) {
-                row.getElements().get(index).setValue(valueFromTable);
+        for (Integer valueFromTable : row.getElements().get(columnIndex).getRemainingChoices()) {
+            boolean isInDifferentField = isInDifferentField(row, valueFromTable);
+            if (isInDifferentField) row.getElements().get(columnIndex).removeChoice(valueFromTable);
+            if (row.getElements().get(columnIndex).getRemainingChoices().size() == 1) {
+                boolean isInDifferentColumnField = isInDifferentColumn(board, columnIndex,
+                        row.getElements().get(columnIndex).getRemainingChoices().get(0));
+                boolean isInDifferentSectionField = isInDifferentSection(board, rowIndex, columnIndex,
+                        row.getElements().get(columnIndex).getRemainingChoices().get(0));
+                thirdOptionNowe(row, columnIndex, isInDifferentColumnField, isInDifferentSectionField);
+                row.getElements().get(columnIndex).setValue(row.getElements().get(columnIndex).getRemainingChoices().get(0));
                 anyAction = true;
                 break;
             }
-//            thirdOptionNowe(row, index);
+            boolean isInDifferentArray = isInDifferentArray(row, valueFromTable, row.getElements().get(columnIndex));
+            if (!isInDifferentField && !isInDifferentArray /*&& !isInDifferentColumnField && !isInDifferentSectionField*/) {
+                boolean isInDifferentColumnField = isInDifferentColumn(board, columnIndex,
+                        row.getElements().get(columnIndex).getRemainingChoices().get(0));
+                boolean isInDifferentSectionField = isInDifferentSection(board, rowIndex, columnIndex,
+                        row.getElements().get(columnIndex).getRemainingChoices().get(0));
+                thirdOptionNowe(row, columnIndex, isInDifferentColumnField, isInDifferentSectionField);
+                row.getElements().get(columnIndex).setValue(valueFromTable);
+                anyAction = true;
+                break;
+            }
 
         }
         return anyAction;
+    }
+
+    public boolean processColumnnnnnnnnnnnnnnnnnnnNowe(SudokuBoard board, int columnIndex, int rowIndex) throws OutOfChoicesException {
+        boolean anyAction = false;
+        SudokuRow column = extractColumnNowe(board, columnIndex);
+
+        for (Integer valueFromTable : column.getElements().get(rowIndex).getRemainingChoices()) {
+            boolean isInDifferentField = isInDifferentField(column, valueFromTable);
+
+            if (isInDifferentField) column.getElements().get(rowIndex).removeChoice(valueFromTable);
+
+            if (column.getElements().get(rowIndex).getRemainingChoices().size() == 1) {
+                boolean isInDifferentRowField = isInDifferentField(board.getRows().get(rowIndex),
+                        column.getElements().get(rowIndex).getRemainingChoices().get(0));
+                boolean isInDifferentSectionField = isInDifferentSection(board, rowIndex, columnIndex,
+                        column.getElements().get(rowIndex).getRemainingChoices().get(0));
+                thirdOptionNowe(column, rowIndex, isInDifferentRowField, isInDifferentSectionField);
+                column.getElements().get(rowIndex).setValue(column.getElements().get(rowIndex).getRemainingChoices().get(0));
+                anyAction = true;
+                injectColumnNowe(column, board, columnIndex);
+                break;
+            }
+            boolean isInDifferentArray = isInDifferentArray(column, valueFromTable, column.getElements().get(rowIndex));
+            if (!isInDifferentField && !isInDifferentArray /*&& !isInDifferentColumnField && !isInDifferentSectionField*/) {
+                column.getElements().get(rowIndex).setValue(valueFromTable);
+                anyAction = true;
+                injectColumnNowe(column, board, columnIndex);
+                break;
+            }
+        }
+        return anyAction;
+    }
+
+    public int sectionValueIndex(SudokuRow section) {
+        int result = -1;
+        for (int i = 0; i < section.getElements().size(); i++) {
+            if (section.getElements().get(i).getValue() == -1) {
+                result = i;
+                break;
+            }
+        }
+        return result;
+    }
+
+    public boolean processSectionnnnnnnnnnnnnnnnNowe(SudokuBoard board, int columnIndex, int rowIndex) throws OutOfChoicesException {
+        boolean anyAction = false;
+        SudokuRow section = extractSectionNowe(board, rowIndex, columnIndex);
+        int valueIndex = sectionValueIndex(section);
+
+        for (Integer valueFromTable : section.getElements().get(valueIndex).getRemainingChoices()) {
+            boolean isInDifferentField = isInDifferentField(section, valueFromTable);
+
+            if (isInDifferentField) section.getElements().get(valueIndex).removeChoice(valueFromTable);
+
+            if (section.getElements().get(valueIndex).getRemainingChoices().size() == 1) {
+                boolean isInDifferentColumnField = isInDifferentColumn(board, columnIndex,
+                        valueFromTable);
+                boolean isInDifferentRowField = isInDifferentField(board.getRows().get(rowIndex),
+                        valueFromTable);
+                thirdOptionNowe(section, valueIndex, isInDifferentColumnField, isInDifferentRowField);
+                section.getElements().get(valueIndex).setValue(section.getElements().get(valueIndex).getRemainingChoices().get(0));
+                injectSectionNowe(section, board, rowIndex, columnIndex);
+                anyAction = true;
+                break;
+            }
+            boolean isInDifferentArray = isInDifferentArray(section, valueFromTable, section.getElements().get(columnIndex));
+            if (!isInDifferentField && !isInDifferentArray /*&& !isInDifferentColumnField && !isInDifferentSectionField*/) {
+
+                section.getElements().get(columnIndex).setValue(valueFromTable);
+                injectSectionNowe(section, board, rowIndex, columnIndex);
+                anyAction = true;
+                break;
+            }
+        }
+        return anyAction;
+    }
+
+    public boolean isInDifferentField(SudokuRow row, int value) {
+        return row.getElements().stream()
+                .filter(e -> e.getValue() == value)
+                .anyMatch(e -> e.getValue() == value);
+    }
+
+    public boolean isInDifferentArray(SudokuRow row, int value, SudokuElement element) {
+        return row.getElements().stream()
+                .filter(e -> e != element && e.getValue() == -1)
+                .flatMap(e -> e.getRemainingChoices().stream())
+                .anyMatch(e -> e == value);
+    }
+
+    public boolean isInDifferentColumn(SudokuBoard board, int columnIndex, int value) {
+        SudokuRow column = extractColumnNowe(board, columnIndex);
+        return isInDifferentField(column, value);
+    }
+
+    public boolean isInDifferentSection(SudokuBoard board, int rowIndex, int columnIndex, int value) {
+        SudokuRow section = extractSectionNowe(board, rowIndex, columnIndex);
+        return isInDifferentField(section, value);
     }
 
     public void secondOptionNowe(SudokuRow row, int index) {
@@ -85,9 +215,13 @@ public final class GameProcessor {
         }
     }
 
-    public void thirdOptionNowe(SudokuRow row, int index) throws OutOfChoicesException {
-        if (row.getElements().get(index).getRemainingChoices().size() == 1 && isInDifferentField(row, row.getElements().get(index).getValue()))
+    public void thirdOptionNowe(SudokuRow row, int index, boolean isInDifferentColumnField, boolean isInDifferentSectionField) throws OutOfChoicesException {
+        if (/*row.getElements().get(index).getRemainingChoices().size() == 1 && */
+                (isInDifferentField(row, row.getElements().get(index).getRemainingChoices().get(0))
+                        || isInDifferentColumnField || isInDifferentSectionField)) {
             throw new OutOfChoicesException();
+        }
+
 
     }
 
@@ -109,9 +243,9 @@ public final class GameProcessor {
         }
     }
 
-    public boolean processColumnNowe(SudokuBoard board, int columnIndex, int valueIndex) throws OutOfChoicesException {
+    public boolean processColumnNowe(SudokuBoard board, int columnIndex, int rowIndex) throws OutOfChoicesException {
         SudokuRow column = extractColumnNowe(board, columnIndex);
-        boolean anyAction = processRowNowe(column, valueIndex);
+        boolean anyAction = processRowNowe(board, column, rowIndex, columnIndex);
         injectColumnNowe(column, board, columnIndex);
         return anyAction;
     }
@@ -190,158 +324,11 @@ public final class GameProcessor {
         SudokuRow section = extractSectionNowe(board, rowIndex, columnIndex);
         for (int i = 0; i < section.getElements().size(); i++) {
             if (section.getElements().get(i).getValue() == -1) {
-                anyAction = processRowNowe(section, i);
+                anyAction = processRowNowe(board, section, columnIndex, rowIndex);
                 break;
             }
-
         }
         injectSectionNowe(section, board, rowIndex, columnIndex);
         return anyAction;
     }
-
-    public void processRow(SudokuRow row) {
-        for (int i = 0; i < row.getElements().size(); i++) {
-
-            if (row.getElements().get(i).getValue() != -1) continue;
-
-            for (Integer valueFromTable : row.getElements().get(i).getRemainingChoices()) {
-                for (int j = 0; j < row.getElements().size(); j++) {
-                    if (i == j) continue;
-                    if (valueFromTable == row.getElements().get(j).getValue()) {
-                        row.getElements().get(i).removeChoice(valueFromTable);
-                        if (row.getElements().get(i).getRemainingChoices().size() == 1) {
-                            row.getElements().get(i).setValue(row.getElements().get(i).getRemainingChoices().get(0));
-                        }
-                    }
-                }
-            }
-        }
-        secondOption(row);
-        try {
-            thirdOption(row);
-        } catch (OutOfChoicesException e) {
-            System.out.println(e);
-        }
-    }
-
-    public boolean isInDifferentField(SudokuRow row, int value) {
-        return row.getElements().stream()
-                .filter(e -> e.getValue() == value)
-                .anyMatch(e -> e.getValue() == value);
-    }
-
-    public boolean isInDifferentArray(SudokuRow row, int value, SudokuElement element) {
-        return row.getElements().stream()
-                .filter(e -> e != element && e.getValue() == -1)
-                .flatMap(e -> e.getRemainingChoices().stream())
-                .anyMatch(e -> e == value);
-    }
-
-    public void secondOption(SudokuRow row) {
-        for (int i = 0; i < row.getElements().size(); i++) {
-            if (row.getElements().get(i).getValue() != -1) continue;
-
-            for (Integer valueFromTable : row.getElements().get(i).getRemainingChoices()) {
-
-                boolean isInDifferentField = isInDifferentField(row, valueFromTable);
-                boolean isInDifferentArray = isInDifferentArray(row, valueFromTable, row.getElements().get(i));
-
-                if (!isInDifferentField && !isInDifferentArray) {
-                    row.getElements().get(i).setValue(valueFromTable);
-                    break;
-                }
-            }
-        }
-    }
-
-    public void thirdOption(SudokuRow row) throws OutOfChoicesException {
-        for (int i = 0; i < row.getElements().size(); i++) {
-            if (row.getElements().get(i).getValue() != -1) continue;
-
-            if (row.getElements().size() == 1 || isInDifferentField(row, row.getElements().get(0).getValue()))
-                throw new OutOfChoicesException();
-        }
-    }
-
-    public void processColumn(SudokuBoard board) {
-        List<SudokuRow> columns = extractColumns(board);
-
-        for (int i = 0; i < columns.size(); i++) {
-            processRow(columns.get(i));
-        }
-
-        for (int i = 0; i < board.getRows().size(); i++) {
-            for (int j = 0; j < board.getRows().size(); j++) {
-                board.getRows().get(j).getElements().add(i, columns.get(i).getElements().get(j));
-                board.getRows().get(j).getElements().remove(j + 1);
-            }
-        }
-    }
-
-    public List<SudokuRow> extractColumns(SudokuBoard board) {
-        List<SudokuRow> columns = new ArrayList<>();
-
-        for (int i = 0; i < board.getRows().size(); i++) {
-            SudokuRow column = new SudokuRow();
-            column.getElements().clear();
-            for (int j = 0; j < board.getRows().size(); j++) {
-                column.getElements().add(board.getRows().get(j).getElements().get(i));
-            }
-            columns.add(column);
-        }
-        return columns;
-    }
-
-    public void processSection(SudokuBoard board) {
-        List<SudokuRow> sections = extractBlocks(board);
-
-        for (int i = 0; i < sections.size(); i++) {
-            processRow(sections.get(i));
-        }
-
-        int counter = 0;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-
-                for (int k = 3 * i; k < 3 + (3 * i); k++) {
-                    for (int l = 3 * j; l < 3 + (3 * j); l++) {
-                        board.getRows().get(k).getElements().add(l, sections.get(0).getElements().get(0));
-                        sections.get(0).getElements().remove(0);
-                        board.getRows().get(k).getElements().remove(l + 1);
-                    }
-                }
-                sections.remove(0);
-            }
-        }
-    }
-
-    public List<SudokuRow> extractBlocks(SudokuBoard board) {
-        List<SudokuRow> sections = new ArrayList<>();
-
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                SudokuRow section = new SudokuRow();
-                section.getElements().clear();
-                for (int k = 3 * i; k < 3 + (3 * i); k++) {
-                    for (int l = 3 * j; l < 3 + (3 * j); l++) {
-                        section.getElements().add(board.getRows().get(k).getElements().get(l));
-                    }
-                }
-                sections.add(section);
-            }
-        }
-        return sections;
-    }
-
-    public boolean process(SudokuBoard board) {
-        for (int i = 0; i < board.getRows().size(); i++) {
-            processRow(board.getRows().get(i));
-        }
-
-        processColumn(board);
-        processSection(board);
-        return true;
-    }
-
-
 }

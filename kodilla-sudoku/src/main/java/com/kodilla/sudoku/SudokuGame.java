@@ -29,7 +29,7 @@ public class SudokuGame {
         }
 
         System.out.println("Processing with the game");
-        processor.process(board);
+        processor.processNowe(board);
         System.out.println(board.toString());
 
         return false;

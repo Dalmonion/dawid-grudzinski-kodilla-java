@@ -35,6 +35,18 @@ public final class SudokuElement {
         }
     }
 
+    public void setOnlyValue(int value) {
+        this.value = value;
+    }
+
+    public void clearRemainingChoices() {
+        remainingChoices.clear();
+    }
+
+    public void addChoice(int choice) {
+        remainingChoices.add(choice);
+    }
+
 
     public List<Integer> getRemainingChoices() {
         return new ArrayList<>(remainingChoices);

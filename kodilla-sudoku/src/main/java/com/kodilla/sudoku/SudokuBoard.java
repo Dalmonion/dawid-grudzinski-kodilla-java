@@ -32,7 +32,13 @@ public final class SudokuBoard extends Prototype<SudokuBoard>{
             SudokuRow clonedRow = new SudokuRow();
             clonedRow.getElements().clear();
             for (SudokuElement element : row.getElements()) {
-                clonedRow.getElements().add(element);
+                SudokuElement clonedElement = new SudokuElement();
+                clonedElement.setValue(element.getValue());
+                clonedElement.clearRemainingChoices();
+                for (int i = 0; i <element.getRemainingChoices().size(); i++) {
+                    clonedElement.addChoice(element.getRemainingChoices().get(i));
+                }
+                clonedRow.getElements().add(clonedElement);
             }
             clonedBoard.getRows().add(clonedRow);
         }
