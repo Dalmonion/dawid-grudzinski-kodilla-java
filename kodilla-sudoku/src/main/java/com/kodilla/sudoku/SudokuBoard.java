@@ -47,14 +47,10 @@ public final class SudokuBoard extends Prototype<SudokuBoard>{
 
     @Override
     public String toString() {
-
         StringBuilder result = new StringBuilder();
-
         for (int i = 0; i < board.size(); i++) {
-
             result.append("| ");
             if (i == 3 || i == 6) result.append("- - - + - - - + - - - |\n| ");
-
             for (int j = 0; j < board.get(i).getElements().size(); j++) {
                 if (board.get(i).getElements().get(j).getValue() == -1) {
                     result.append(". ");

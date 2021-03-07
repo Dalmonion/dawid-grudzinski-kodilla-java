@@ -1,8 +1,5 @@
 package com.kodilla.sudoku;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class SudokuGame {
 
     private final SudokuBoard board;
@@ -24,16 +21,24 @@ public class SudokuGame {
             }
             if (input.length() == 3) {
                 board.updateBoard(input);
-                System.out.println(board.toString());
+                IOService.printBoard(board);
             }
         }
 
-        System.out.println("Processing with the game");
-        processor.processNowe(board);
-        System.out.println(board.toString());
+        SudokuResult result = processor.process(board);
+        if(result.isResolved()) {
+            IOService.afterResolve();
+            IOService.printBoard(result.getBoard());
+        }
 
-        return false;
+        IOService.nextGameTypo();
+        while (true) {
+            input = IOService.continuePlay();
+            if (input.equalsIgnoreCase("")) {
+                return false;
+            } else {
+                return true;
+            }
+        }
     }
-
-
 }

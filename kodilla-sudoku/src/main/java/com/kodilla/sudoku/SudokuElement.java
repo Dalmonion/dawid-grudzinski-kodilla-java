@@ -8,9 +8,7 @@ public final class SudokuElement {
 
     private int value;
     private final Integer choiceArray [] = new Integer[] {1, 2, 3, 4, 5, 6, 7, 8, 9};
-//    private List<Integer> remainingChoices1 = new ArrayList<>(Arrays.asList(choiceArray));
     private ArrayList<Integer> remainingChoices;
-
 
     public SudokuElement() {
         value = EMPTY;
@@ -35,10 +33,6 @@ public final class SudokuElement {
         }
     }
 
-    public void setOnlyValue(int value) {
-        this.value = value;
-    }
-
     public void clearRemainingChoices() {
         remainingChoices.clear();
     }
@@ -47,16 +41,12 @@ public final class SudokuElement {
         remainingChoices.add(choice);
     }
 
-
     public List<Integer> getRemainingChoices() {
         return new ArrayList<>(remainingChoices);
     }
 
     public void removeChoice(int choice) {
-//        for (int i = 0; i < remainingChoices.size(); i++) {
-//            if (choice == remainingChoices.get(i)) remainingChoices.remove(i);
-//        }
-        remainingChoices.remove(new Integer(choice));
+        remainingChoices.remove(Integer.valueOf(choice));
     }
 
     @Override

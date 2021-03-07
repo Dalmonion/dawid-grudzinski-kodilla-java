@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class SudokuRow {
-    private List<SudokuElement> row = new ArrayList<>();
+    private final List<SudokuElement> row = new ArrayList<>();
 
     public SudokuRow() {
         for (int i = 0; i < 9; i++) {

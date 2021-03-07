@@ -1,7 +1,5 @@
 package com.kodilla.sudoku;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 
@@ -25,8 +23,23 @@ public class IOService {
     }
 
     public static String choiceInput() {
-
         System.out.print("Enter your choice: ");
         return scanner.nextLine();
+    }
+
+    public static void afterResolve() {
+        System.out.println("Here is the solution:");
+    }
+
+    public static void nextGameTypo() {
+        System.out.println("If you wish to play again, press enter...");
+    }
+
+    public static String continuePlay() {
+        return scanner.nextLine();
+    }
+
+    public static void printBoard(SudokuBoard board) {
+        System.out.print(board.toString());
     }
 }
