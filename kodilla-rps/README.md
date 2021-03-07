@@ -7,7 +7,7 @@
 * [Setup](#setup)
 
 # General info
-This is game called rock-paper-scissors with extension of 2 additional choose options. The game is meant for two players.
+I present to you a game called rock-paper-scissors with extension of 2 additional choose options. The game is meant for two players.
 
 # Game navigation
 To navigate through the game simply follow displayed options.

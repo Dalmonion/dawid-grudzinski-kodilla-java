@@ -520,9 +520,10 @@ class SudokuTestSuite {
         board.getRows().get(7).getElements().get(0).setValue(5);
         board.getRows().get(7).getElements().get(5).setValue(9);
         board.getRows().get(8).getElements().get(7).setValue(4);
-
+        System.out.println(board.toString());
         //When
         SudokuResult result = processor.process(board);
+        System.out.println(result.getBoard().toString());
 
         //Then
         checker.checkBoard(result, processor);
