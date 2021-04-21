@@ -1,11 +1,11 @@
 plugins {
+    id 'org.springframework.boot'
+    id 'io.spring.dependency-management'
     id 'java'
-    id 'org.springframework.boot' version '2.3.8.RELEASE'
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 }
 
 group = 'com.kodilla'
-version = '0.0.1-SNAPSHOT'
+version '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 repositories {
@@ -14,6 +14,7 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 

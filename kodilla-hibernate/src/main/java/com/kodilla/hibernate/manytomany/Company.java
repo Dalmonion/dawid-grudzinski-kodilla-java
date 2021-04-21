@@ -1,16 +1,24 @@
 package com.kodilla.hibernate.manytomany;
 
+import org.springframework.stereotype.Service;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-@NamedNativeQuery (
-        name = "Company.retrieveCompaniesWithThreeFirstSigns",
-        query = "SELECT * FROM COMPANIES WHERE SUBSTRING(NAME, 1, 3) = :INPUT",
-        resultClass = Company.class
-)
-
+@NamedNativeQueries({
+        @NamedNativeQuery(
+                name = "Company.retrieveCompaniesWithThreeFirstSigns",
+                query = "SELECT * FROM COMPANIES WHERE SUBSTRING(NAME, 1, 3) = :INPUT",
+                resultClass = Company.class
+        ),
+        @NamedNativeQuery(
+                name = "Company.retrieveCompaniesWithTheFragment",
+                query = "SELECT * FROM COMPANIES WHERE NAME LIKE :INPUT",
+                resultClass = Company.class
+        )
+})
 @Entity
 @Table(name = "COMPANIES")
 public class Company {

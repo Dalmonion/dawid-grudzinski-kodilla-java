@@ -5,6 +5,7 @@ import com.kodilla.hibernate.manytomany.Employee;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.kodilla.hibernate.manytomany.facade.SearchFacade;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +20,9 @@ public class CompanyDaoTestSuite {
 
     @Autowired
     private EmployeeDao employeeDao;
+
+    @Autowired
+    private SearchFacade searchFacade;
 
     @Test
     void testSaveManyToMany() {
@@ -128,6 +132,75 @@ public class CompanyDaoTestSuite {
             companyDao.deleteById(dataMastersId);
             companyDao.deleteById(greyMatterId);
         } catch (Exception e) {
+        }
+    }
+
+    @Test
+    void searchCompanyByFragment() {
+        //Given
+        Company softwareMachine = new Company("Software Machine");
+        Company softwareSomethingElse = new Company("Software Something Else");
+        Company dataMasters = new Company("Data Masters");
+        Company greyMatter = new Company("Grey Matter");
+
+        //When
+        companyDao.save(softwareMachine);
+        int softMachineId = softwareMachine.getId();
+        companyDao.save(softwareSomethingElse);
+        int softSomethingElseIde = softwareSomethingElse.getId();
+        companyDao.save(dataMasters);
+        int dataMastersId = dataMasters.getId();
+        companyDao.save(greyMatter);
+        int greyMatterId = greyMatter.getId();
+        List<Company> resultsList = searchFacade.findCompaniesByAnyFragment("Software");
+
+        //Then
+        assertEquals(2, resultsList.size());
+
+        //CleanUp
+        try {
+            companyDao.deleteById(softMachineId);
+            companyDao.deleteById(softSomethingElseIde);
+            companyDao.deleteById(dataMastersId);
+            companyDao.deleteById(greyMatterId);
+        } catch (Exception e) {
+        }
+    }
+
+    @Test
+    void testEmployeesByFragment() {
+        //Given
+        Employee johnSmith = new Employee("John", "Smith");
+        Employee stephanieClarckson = new Employee("Stephanie", "Clarckson");
+        Employee lindaKovalsky = new Employee("Linda", "Kovalsky");
+        Employee adamKovalsky = new Employee("Adam", "Kovalsky");
+        Employee kovalskyDavid = new Employee("Kovalsky", "David");
+
+        //When
+        employeeDao.save(johnSmith);
+        int johnId = johnSmith.getId();
+        employeeDao.save(stephanieClarckson);
+        int stephanieId = stephanieClarckson.getId();
+        employeeDao.save(lindaKovalsky);
+        int lindaId = lindaKovalsky.getId();
+        employeeDao.save(adamKovalsky);
+        int adamId = adamKovalsky.getId();
+        employeeDao.save(kovalskyDavid);
+        int davidId = kovalskyDavid.getId();
+        List<Employee> employeesKovalsky = searchFacade.findEmployeesByFragment("Kova");
+
+        //Then
+        assertEquals(3, employeesKovalsky.size());
+
+        //CleanUp
+        try {
+            employeeDao.deleteById(johnId);
+            employeeDao.deleteById(stephanieId);
+            employeeDao.deleteById(lindaId);
+            employeeDao.deleteById(adamId);
+            employeeDao.deleteById(davidId);
+        } catch (Exception e) {
+
         }
     }
 }

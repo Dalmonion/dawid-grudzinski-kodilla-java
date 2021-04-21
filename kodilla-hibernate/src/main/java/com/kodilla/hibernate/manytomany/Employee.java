@@ -1,6 +1,8 @@
 package com.kodilla.hibernate.manytomany;
 
 
+import org.springframework.stereotype.Service;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -10,6 +12,12 @@ import java.util.List;
 @NamedQuery(
         name = "Employee.retrieveEmployeesWithLastname",
         query = "FROM Employee WHERE lastname = :LASTNAME"
+)
+
+@NamedNativeQuery(
+        name = "Employee.retrieveEmployeesWithFragment",
+        query = "SELECT * FROM EMPLOYEES WHERE FIRSTNAME LIKE :INPUT OR LASTNAME LIKE :INPUT",
+        resultClass = Employee.class
 )
 
 @Entity

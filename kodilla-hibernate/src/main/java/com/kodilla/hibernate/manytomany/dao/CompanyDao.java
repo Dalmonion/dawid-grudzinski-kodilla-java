@@ -15,4 +15,7 @@ public interface CompanyDao extends CrudRepository<Company, Integer> {
 
     @Query (nativeQuery = true)
     List<Company> retrieveCompaniesWithThreeFirstSigns(@Param("INPUT") String input);
+
+    @Query (nativeQuery = true)
+    List<Company> retrieveCompaniesWithTheFragment(@Param("INPUT") String input);
 }
